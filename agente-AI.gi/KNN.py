@@ -16,7 +16,7 @@ from sklearn.metrics import (
 # CONFIGURACIÓN
 # ============================================================
 
-ruta_dataset = "dataset_teste3"
+ruta_dataset ="dataset_teste3"
 
 EXTENSIONES_VALIDAS = (".png", ".jpg", ".jpeg")
 

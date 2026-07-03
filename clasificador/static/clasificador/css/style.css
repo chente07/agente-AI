@@ -1,0 +1,263 @@
+:root {
+    --bg-main: #efefef;
+    --bg-panel: #d6d6d6;
+    --bg-box: #bdbdbd;
+    --text-main: #222;
+    --text-soft: #666;
+    --white: #ffffff;
+
+    --purple-1: #7b1ee6;
+    --purple-2: #b667f1;
+    --purple-border: #7f34ff;
+
+    --green-1: #08c766;
+    --green-2: #0dbb5e;
+
+    --red-1: #ff3131;
+    --red-2: #ff4747;
+
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+    --radius-xl: 30px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+.topbar {
+    width: 100%;
+    background: #d3d3d3;
+    text-align: center;
+    padding: 28px 20px;
+    border-top: 3px solid var(--purple-border);
+}
+
+.app-title {
+    font-size: 2rem;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.app-subtitle {
+    color: #7a7a7a;
+    font-size: 0.95rem;
+}
+
+.main-content {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* -------- BOTONES -------- */
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    color: var(--white);
+    font-weight: bold;
+    border-radius: 14px;
+    padding: 16px 24px;
+    border: 2px solid var(--purple-border);
+    transition: 0.2s ease;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.96;
+}
+
+.btn-green {
+    background: linear-gradient(90deg, var(--green-1), var(--green-2));
+}
+
+.btn-red {
+    background: linear-gradient(90deg, var(--red-1), var(--red-2));
+}
+
+.btn-purple {
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+}
+
+.full-btn {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.small-btn {
+    display: inline-block;
+    margin-top: 18px;
+    width: 180px;
+}
+
+/* -------- PÁGINA INICIO -------- */
+
+.welcome-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-top: 24px;
+}
+
+.warning-box {
+    width: 100%;
+    max-width: 860px;
+    min-height: 360px;
+    background: var(--bg-box);
+    border-radius: 30px;
+    padding: 50px 60px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.warning-box h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.warning-box p {
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.small-note {
+    color: #444;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.welcome-actions {
+    width: 100%;
+    max-width: 860px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* -------- PÁGINA ANÁLISIS -------- */
+
+.analysis-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.left-panel,
+.right-panel {
+    width: 100%;
+}
+
+.image-preview-box {
+    width: 100%;
+    min-height: 360px;
+    background: #b5b5b5;
+    border-radius: 0;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 12px;
+    margin-bottom: 22px;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 340px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.image-preview-box p,
+.meta-box p,
+.result-box p {
+    font-size: 1rem;
+    color: #222;
+}
+
+.meta-box {
+    width: 100%;
+    min-height: 280px;
+    background: #d4d4d4;
+    padding: 28px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
+}
+
+.meta-box h3,
+.result-box h3 {
+    margin-bottom: 14px;
+    font-size: 1.3rem;
+}
+
+.result-box {
+    width: 100%;
+    min-height: 140px;
+    background: #bdbdbd;
+    border-radius: 26px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+.upload-form input[type="file"] {
+    display: none;
+}
+
+/* -------- RESPONSIVE -------- */
+
+@media (max-width: 992px) {
+    .analysis-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .warning-box {
+        padding: 30px 24px;
+        min-height: auto;
+    }
+
+    .welcome-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .app-title {
+        font-size: 1.6rem;
+    }
+
+    .warning-box h2 {
+        font-size: 1.6rem;
+    }
+}

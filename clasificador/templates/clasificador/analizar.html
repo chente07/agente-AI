@@ -1,0 +1,53 @@
+{% extends 'clasificador/base.html' %}
+
+{% block titulo %}Analizar radiografía | PulmoScan{% endblock %}
+
+{% block contenido %}
+<section class="analysis-layout">
+
+    <div class="left-panel">
+        <h2 class="section-title">Imagen cargada</h2>
+
+        <div class="image-preview-box">
+            {% if analisis %}
+                <img src="{{ analisis.imagen.url }}" alt="Radiografía cargada" class="preview-image">
+            {% else %}
+                <p>Área de imagen</p>
+            {% endif %}
+        </div>
+
+        <div class="result-box">
+            <h3>Resultados del análisis</h3>
+            <p>Aquí se mostrarán los datos del análisis ejecutado.</p>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            {% csrf_token %}
+
+            <label for="{{ formulario.imagen.id_for_label }}" class="btn btn-purple full-btn">
+                Cargar imagen
+            </label>
+            {{ formulario.imagen }}
+
+            <div class="meta-box">
+                <h3>Metadatos de imagen</h3>
+
+                {% if analisis %}
+                    <p><strong>Archivo:</strong> {{ analisis.imagen.name }}</p>
+                {% else %}
+                    <p>Área de metadatos de imagen.</p>
+                {% endif %}
+
+                <a href="{% url 'analizar' %}" class="btn btn-red small-btn">Quitar imagen</a>
+            </div>
+
+            <button type="submit" class="btn btn-purple full-btn">
+                Ejecutar análisis
+            </button>
+        </form>
+    </div>
+
+</section>
+{% endblock %}

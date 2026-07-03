@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}PulmoScan{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'clasificador/css/style.css' %}">
+</head>
+<body>
+
+    <header class="topbar">
+        <h1 class="app-title">PulmoScan</h1>
+        <p class="app-subtitle">Plataforma académica de apoyo para clasificación pulmonar</p>
+    </header>
+
+    <main class="main-content">
+        {% block contenido %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>

@@ -218,14 +218,7 @@ body {
     font-size: 1.3rem;
 }
 
-.result-box {
-    width: 100%;
-    min-height: 140px;
-    background: #bdbdbd;
-    border-radius: 26px;
-    padding: 30px;
-    box-shadow: var(--shadow);
-}
+
 
 .upload-form input[type="file"] {
     display: none;
@@ -259,5 +252,120 @@ body {
 
     .warning-box h2 {
         font-size: 1.6rem;
+    }
+}
+
+.classification-result {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.result-label {
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 10px;
+}
+
+.result-value {
+    display: inline-block;
+    min-width: 220px;
+    padding: 14px 25px;
+    border-radius: 14px;
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.result-normal {
+    background: linear-gradient(90deg, #0ebf68, #25a85f);
+}
+
+.result-pneumonia {
+    background: linear-gradient(90deg, #e53935, #ff5c5c);
+}
+
+.confidence-value {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+}
+
+.medical-warning {
+    background: #fff3cd;
+    border-left: 5px solid #f1b900;
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #664d03;
+    line-height: 1.5;
+    text-align: left;
+}
+.form-error {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    background: #fde8e8;
+    border-left: 5px solid #d93025;
+    border-radius: 10px;
+    color: #8a1c16;
+    font-size: 0.95rem;
+}
+
+.form-error p {
+    margin: 0;
+}
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+/*brillo*/
+.result-box {
+    width: 100%;
+    min-height: 140px;
+    background: #bdbdbd;
+    border: 3px solid transparent;
+    border-radius: 26px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        outline-color 0.3s ease;
+}
+
+.result-box.result-active {
+    border-color: #39ff14 !important;
+    outline: 2px solid #39ff14;
+    outline-offset: 4px;
+
+    box-shadow:
+        0 0 10px #39ff14,
+        0 0 22px rgba(57, 255, 20, 0.90),
+        0 0 40px rgba(57, 255, 20, 0.65),
+        inset 0 0 12px rgba(57, 255, 20, 0.25) !important;
+
+    animation: result-glow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes result-glow {
+    from {
+        outline-color: rgba(57, 255, 20, 0.65);
+
+        box-shadow:
+            0 0 8px #39ff14,
+            0 0 16px rgba(57, 255, 20, 0.65),
+            0 0 28px rgba(57, 255, 20, 0.40),
+            inset 0 0 8px rgba(57, 255, 20, 0.20);
+    }
+
+    to {
+        outline-color: rgba(57, 255, 20, 1);
+
+        box-shadow:
+            0 0 14px #39ff14,
+            0 0 30px rgba(57, 255, 20, 0.95),
+            0 0 55px rgba(57, 255, 20, 0.70),
+            inset 0 0 16px rgba(57, 255, 20, 0.35);
     }
 }

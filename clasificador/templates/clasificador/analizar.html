@@ -8,42 +8,127 @@
     <div class="left-panel">
         <h2 class="section-title">Imagen cargada</h2>
 
-        <div class="image-preview-box">
+        <div class="image-preview-box" id="image-preview-box">
             {% if analisis %}
-                <img src="{{ analisis.imagen.url }}" alt="Radiografía cargada" class="preview-image">
+                <img
+                    src="{{ analisis.imagen.url }}"
+                    alt="Radiografía cargada"
+                    class="preview-image"
+                    id="preview-image"
+                >
             {% else %}
-                <p>Área de imagen</p>
+                <p id="preview-message">
+                    Seleccione una imagen para visualizarla.
+                </p>
+
+                <img
+                    src=""
+                    alt="Vista previa de radiografía"
+                    class="preview-image"
+                    id="preview-image"
+                    hidden
+                >
             {% endif %}
         </div>
 
-        <div class="result-box">
+        <div class="result-box {% if resultado %}result-active{% endif %}">
             <h3>Resultados del análisis</h3>
-            <p>Aquí se mostrarán los datos del análisis ejecutado.</p>
+
+            <div id="result-content">
+                {% if resultado %}
+                    <div class="classification-result">
+
+                        <p class="result-label">
+                            Clasificación preliminar:
+                        </p>
+
+                        <p class="
+                            result-value
+                            {% if resultado == 'NORMAL' %}
+                                result-normal
+                            {% else %}
+                                result-pneumonia
+                            {% endif %}
+                        ">
+                            {{ resultado }}
+                        </p>
+
+                        <p class="confidence-value">
+                            Confianza simulada:
+                            <strong>{{ confianza|floatformat:2 }} %</strong>
+                        </p>
+
+                        <div class="medical-warning">
+                            Este resultado es una simulación académica y no representa
+                            un diagnóstico médico. Consulte a un profesional de la salud.
+                        </div>
+
+                    </div>
+                {% else %}
+                    <p>
+                        Seleccione una radiografía y presione
+                        <strong>Ejecutar análisis</strong>.
+                    </p>
+                {% endif %}
+            </div>
         </div>
     </div>
 
     <div class="right-panel">
-        <form method="POST" enctype="multipart/form-data" class="upload-form">
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="upload-form"
+            id="analysis-form"
+        >
             {% csrf_token %}
 
-            <label for="{{ formulario.imagen.id_for_label }}" class="btn btn-purple full-btn">
+            <label
+                for="{{ formulario.imagen.id_for_label }}"
+                class="btn btn-purple full-btn"
+            >
                 Cargar imagen
             </label>
+
             {{ formulario.imagen }}
+
+            {% if formulario.imagen.errors %}
+                <div class="form-error">
+                    {% for error in formulario.imagen.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
             <div class="meta-box">
                 <h3>Metadatos de imagen</h3>
 
-                {% if analisis %}
-                    <p><strong>Archivo:</strong> {{ analisis.imagen.name }}</p>
-                {% else %}
-                    <p>Área de metadatos de imagen.</p>
-                {% endif %}
+                <p id="file-name">
+                    <strong>Archivo:</strong> Ninguno seleccionado
+                </p>
 
-                <a href="{% url 'analizar' %}" class="btn btn-red small-btn">Quitar imagen</a>
+                <p id="file-type">
+                    <strong>Tipo:</strong> —
+                </p>
+
+                <p id="file-size">
+                    <strong>Tamaño:</strong> —
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-red small-btn"
+                    id="remove-image"
+                >
+                    Quitar imagen
+                </button>
             </div>
 
-            <button type="submit" class="btn btn-purple full-btn">
+            <button
+                type="submit"
+                class="btn btn-purple full-btn"
+                id="analyze-button"
+            >
                 Ejecutar análisis
             </button>
         </form>

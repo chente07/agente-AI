@@ -1,2 +1,14 @@
+# Ignorar los modelos de IA gigantes (Pesados para GitHub)
+*.pt
+*.pth
+
+# Ignorar las carpetas completas de datasets de imágenes
 dataset_teste3/
 dataset_torax/
+dataset_torax_yolo/
+
+# Ignorar archivos ocultos del sistema y de Python
+__pycache__/
+*.pyc
+.DS_Store
+.virtual_documents/

@@ -369,3 +369,6 @@ body {
             inset 0 0 16px rgba(57, 255, 20, 0.35);
     }
 }
+.result-warning {
+    background: linear-gradient(90deg, #f39c12, #f1c40f);
+}

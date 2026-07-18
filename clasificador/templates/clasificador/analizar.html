@@ -35,35 +35,72 @@
             <h3>Resultados del análisis</h3>
 
             <div id="result-content">
-                {% if resultado %}
+                {% if error_analisis %}
+                    <div class="form-error">
+                        <p>{{ error_analisis }}</p>
+                    </div>
+
+                {% elif resultado %}
                     <div class="classification-result">
 
-                        <p class="result-label">
-                            Clasificación preliminar:
-                        </p>
+                        {% if es_torax %}
+                            <p class="result-label">
+                                Clasificación preliminar:
+                            </p>
 
-                        <p class="
-                            result-value
-                            {% if resultado == 'NORMAL' %}
-                                result-normal
-                            {% else %}
-                                result-pneumonia
+                            <p class="
+                                result-value
+                                {% if resultado == 'NORMAL' %}
+                                    result-normal
+                                {% elif resultado == 'NEUMONIA' %}
+                                    result-pneumonia
+                                {% else %}
+                                    result-warning
+                                {% endif %}
+                            ">
+                                {{ resultado }}
+                            </p>
+
+                            <p class="confidence-value">
+                                Confianza del modelo:
+                                <strong>{{ confianza|floatformat:2 }} %</strong>
+                            </p>
+
+                            {% if confianza_torax %}
+                                <p class="confidence-value">
+                                    Verificación de tórax:
+                                    <strong>{{ confianza_torax|floatformat:2 }} %</strong>
+                                </p>
                             {% endif %}
-                        ">
-                            {{ resultado }}
-                        </p>
 
-                        <p class="confidence-value">
-                            Confianza simulada:
-                            <strong>{{ confianza|floatformat:2 }} %</strong>
-                        </p>
+                            <div class="medical-warning">
+                                Este resultado fue generado por un modelo de inteligencia artificial
+                                con fines académicos y no representa un diagnóstico médico.
+                                Consulte a un profesional de la salud.
+                            </div>
 
-                        <div class="medical-warning">
-                            Este resultado es una simulación académica y no representa
-                            un diagnóstico médico. Consulte a un profesional de la salud.
-                        </div>
+                        {% else %}
+                            <p class="result-label">
+                                Imagen no válida para análisis pulmonar:
+                            </p>
+
+                            <p class="result-value result-warning">
+                                NO TÓRAX
+                            </p>
+
+                            <p class="confidence-value">
+                                Confianza del filtro:
+                                <strong>{{ confianza|floatformat:2 }} %</strong>
+                            </p>
+
+                            <div class="medical-warning">
+                                La imagen cargada no corresponde a una radiografía de tórax.
+                                Seleccione una imagen válida para ejecutar el análisis pulmonar.
+                            </div>
+                        {% endif %}
 
                     </div>
+
                 {% else %}
                     <p>
                         Seleccione una radiografía y presione

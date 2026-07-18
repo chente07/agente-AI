@@ -1,25 +1,29 @@
-# Entorno virtual
-venv/
-env/
-.venv/
-
-# Python
+# Python / Django
 __pycache__/
 *.pyc
 *.pyo
-
-# Django
+*.pyd
 db.sqlite3
+
+# Entorno virtual
+env/
+venv/
+.venv/
+
+# Archivos subidos por usuarios
+media/
+
+# Archivos temporales
 *.log
 
-# Variables de entorno
-.env
-
-# Visual Studio Code
+# VS Code
 .vscode/
+
+# Datasets y entrenamiento
+datasets/
+runs/
+*.zip
 
 # Sistema operativo
 .DS_Store
 Thumbs.db
-
-media

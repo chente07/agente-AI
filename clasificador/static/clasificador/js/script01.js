@@ -4,11 +4,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const previewMessage = document.getElementById("preview-message");
     const removeButton = document.getElementById("remove-image");
     const analyzeButton = document.getElementById("analyze-button");
+    const loadImageLabel = document.getElementById("load-image-label");
     const analysisForm = document.getElementById("analysis-form");
     const resultContent = document.getElementById("result-content");
     const resultBox = document.querySelector(".result-box");
 
-    
     const fileName = document.getElementById("file-name");
     const fileType = document.getElementById("file-type");
     const fileSize = document.getElementById("file-size");
@@ -22,32 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    const navigationEntry =
-    performance.getEntriesByType("navigation")[0];
-
-    if ( navigationEntry &&  navigationEntry.type === "back_forward" )   {
-        clearPreview();
-        clearClientError();
-    }   
-
-    /* */
-    window.addEventListener("pageshow", function (event) {
-        const navigationEntry =
-            performance.getEntriesByType("navigation")[0];
-
-        const restoredFromHistory =
-            event.persisted ||
-            (
-                navigationEntry &&
-                navigationEntry.type === "back_forward"
-            );
-
-        if (restoredFromHistory) {
-            clearPreview();
-            clearClientError();
-        }
-    });
-
     const allowedTypes = [
         "image/jpeg",
         "image/png"
@@ -55,7 +29,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const maxSize = 5 * 1024 * 1024;
 
-    analyzeButton.disabled = true;
+    const hasServerResult =
+        resultBox &&
+        (
+            resultBox.classList.contains("result-active-normal") ||
+            resultBox.classList.contains("result-active-pneumonia") ||
+            resultBox.classList.contains("result-active-warning")
+        );
+
+    if (!hasServerResult) {
+        analyzeButton.disabled = true;
+    }
 
     imageInput.addEventListener("change", function () {
         clearClientError();
@@ -100,12 +84,15 @@ document.addEventListener("DOMContentLoaded", function () {
             `<strong>Archivo:</strong> ${file.name}`;
 
         fileType.innerHTML =
-            `<strong>Tipo:</strong> ${file.type}`;
+            "<strong>Estado:</strong> Imagen lista para análisis";
 
         fileSize.innerHTML =
             `<strong>Tamaño:</strong> ${sizeInMB} MB`;
 
         analyzeButton.disabled = false;
+        analyzeButton.textContent = "Ejecutar análisis";
+
+        clearResultBox();
     });
 
     removeButton.addEventListener("click", function () {
@@ -115,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (analysisForm) {
         analysisForm.addEventListener("submit", function (event) {
-            if (!imageInput.files.length) {
+            if (!imageInput.files.length && !hasServerResult) {
                 event.preventDefault();
 
                 showClientError(
@@ -127,42 +114,80 @@ document.addEventListener("DOMContentLoaded", function () {
 
             analyzeButton.disabled = true;
             analyzeButton.textContent = "Analizando...";
+
+            imageInput.disabled = true;
+
+            if (loadImageLabel) {
+                loadImageLabel.classList.add("btn-disabled");
+            }
         });
     }
 
+    window.addEventListener("pageshow", function (event) {
+        const navigationEntry =
+            performance.getEntriesByType("navigation")[0];
+
+        const restoredFromHistory =
+            event.persisted ||
+            (
+                navigationEntry &&
+                navigationEntry.type === "back_forward"
+            );
+
+        if (restoredFromHistory) {
+            clearPreview();
+            clearClientError();
+        }
+    });
+
     function clearPreview() {
-    imageInput.value = "";
+        imageInput.value = "";
+        imageInput.disabled = false;
 
-    previewImage.src = "";
-    previewImage.hidden = true;
+        if (loadImageLabel) {
+            loadImageLabel.classList.remove("btn-disabled");
+        }
 
-    if (previewMessage) {
-        previewMessage.hidden = false;
+        previewImage.src = "";
+        previewImage.hidden = true;
+
+        if (previewMessage) {
+            previewMessage.hidden = false;
+        }
+
+        fileName.innerHTML =
+            "<strong>Archivo:</strong> Ninguno seleccionado";
+
+        fileType.innerHTML =
+            "<strong>Estado:</strong> —";
+
+        fileSize.innerHTML =
+            "<strong>Resultado:</strong> —";
+
+        analyzeButton.disabled = true;
+        analyzeButton.textContent = "Ejecutar análisis";
+
+        clearResultBox();
     }
 
-    fileName.innerHTML =
-        "<strong>Archivo:</strong> Ninguno seleccionado";
+    function clearResultBox() {
+        if (resultContent) {
+            resultContent.innerHTML = `
+                <p>
+                    Seleccione una radiografía y presione
+                    <strong>Ejecutar análisis</strong>.
+                </p>
+            `;
+        }
 
-    fileType.innerHTML =
-        "<strong>Tipo:</strong> —";
-
-    fileSize.innerHTML =
-        "<strong>Tamaño:</strong> —";
-
-    analyzeButton.disabled = true;
-    analyzeButton.textContent = "Ejecutar análisis";
-
-    if (resultContent) {
-        resultContent.innerHTML = `
-            <p>
-                Seleccione una radiografía y presione
-                <strong>Ejecutar análisis</strong>.
-            </p>
-        `;
-    }
-    if (resultBox) {
-        resultBox.classList.remove("result-active");
-    }
+        if (resultBox) {
+            resultBox.classList.remove(
+                "result-active",
+                "result-active-normal",
+                "result-active-pneumonia",
+                "result-active-warning"
+            );
+        }
     }
 
     function showClientError(message) {

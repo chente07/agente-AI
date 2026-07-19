@@ -18,7 +18,7 @@
                 >
             {% else %}
                 <p id="preview-message">
-                    Seleccione una imagen para visualizarla.
+                    Seleccione una radiografía de tórax en formato JPG, JPEG o PNG.
                 </p>
 
                 <img
@@ -31,7 +31,16 @@
             {% endif %}
         </div>
 
-        <div class="result-box {% if resultado %}result-active{% endif %}">
+        <div class="
+            result-box
+            {% if resultado == 'NORMAL' %}
+                result-active-normal
+            {% elif resultado == 'NEUMONIA' %}
+                result-active-pneumonia
+            {% elif resultado == 'NO_TORAX' %}
+                result-active-warning
+            {% endif %}
+        ">
             <h3>Resultados del análisis</h3>
 
             <div id="result-content">
@@ -45,7 +54,7 @@
 
                         {% if es_torax %}
                             <p class="result-label">
-                                Clasificación preliminar:
+                                Clasificación preliminar del modelo:
                             </p>
 
                             <p class="
@@ -73,10 +82,16 @@
                                 </p>
                             {% endif %}
 
+                            {% if mensaje_interpretativo %}
+                                <p class="interpretation-message">
+                                    {{ mensaje_interpretativo }}
+                                </p>
+                            {% endif %}
+
                             <div class="medical-warning">
+                                <strong>Aviso:</strong>
                                 Este resultado fue generado por un modelo de inteligencia artificial
-                                con fines académicos y no representa un diagnóstico médico.
-                                Consulte a un profesional de la salud.
+                                con fines académicos. No sustituye la valoración de un médico especialista.
                             </div>
 
                         {% else %}
@@ -93,9 +108,16 @@
                                 <strong>{{ confianza|floatformat:2 }} %</strong>
                             </p>
 
+                            {% if mensaje_interpretativo %}
+                                <p class="interpretation-message">
+                                    {{ mensaje_interpretativo }}
+                                </p>
+                            {% endif %}
+
                             <div class="medical-warning">
-                                La imagen cargada no corresponde a una radiografía de tórax.
-                                Seleccione una imagen válida para ejecutar el análisis pulmonar.
+                                <strong>Aviso:</strong>
+                                El análisis de neumonía solo se ejecuta cuando la imagen corresponde
+                                a una radiografía de tórax.
                             </div>
                         {% endif %}
 
@@ -122,12 +144,23 @@
 
             <label
                 for="{{ formulario.imagen.id_for_label }}"
-                class="btn btn-purple full-btn"
+                class="btn btn-purple full-btn {% if analisis %}btn-disabled{% endif %}"
+                id="load-image-label"
             >
                 Cargar imagen
             </label>
 
-            {{ formulario.imagen }}
+            {% if analisis %}
+                <input
+                    type="file"
+                    id="image-input"
+                    name="imagen"
+                    accept=".jpg,.jpeg,.png"
+                    disabled
+                >
+            {% else %}
+                {{ formulario.imagen }}
+            {% endif %}
 
             {% if formulario.imagen.errors %}
                 <div class="form-error">
@@ -141,23 +174,38 @@
                 <h3>Metadatos de imagen</h3>
 
                 <p id="file-name">
-                    <strong>Archivo:</strong> Ninguno seleccionado
+                    <strong>Archivo:</strong>
+                    {% if analisis %}
+                        {{ analisis.imagen.name }}
+                    {% else %}
+                        Ninguno seleccionado
+                    {% endif %}
                 </p>
 
                 <p id="file-type">
-                    <strong>Tipo:</strong> —
+                    <strong>Estado:</strong>
+                    {% if analisis %}
+                        Imagen analizada
+                    {% else %}
+                        —
+                    {% endif %}
                 </p>
 
                 <p id="file-size">
-                    <strong>Tamaño:</strong> —
+                    <strong>Resultado:</strong>
+                    {% if resultado %}
+                        {{ resultado }}
+                    {% else %}
+                        —
+                    {% endif %}
                 </p>
 
                 <button
                     type="button"
-                    class="btn btn-red small-btn"
+                    class="btn btn-red full-btn"
                     id="remove-image"
                 >
-                    Quitar imagen
+                    Remover imagen o Nuevo análisis
                 </button>
             </div>
 
@@ -165,9 +213,18 @@
                 type="submit"
                 class="btn btn-purple full-btn"
                 id="analyze-button"
+                {% if analisis %}disabled{% endif %}
             >
-                Ejecutar análisis
+                {% if analisis %}
+                    Análisis completado
+                {% else %}
+                    Ejecutar análisis
+                {% endif %}
             </button>
+
+            <a href="{% url 'inicio' %}" class="btn btn-green full-btn">
+                Regresar al inicio
+            </a>
         </form>
     </div>
 

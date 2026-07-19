@@ -16,6 +16,7 @@ def analizar(request):
     es_torax = None
     mensaje_modelo = None
     error_analisis = None
+    mensaje_interpretativo = None
 
     if request.method == "POST":
         formulario = AnalisisForm(request.POST, request.FILES)
@@ -33,6 +34,30 @@ def analizar(request):
                 es_torax = prediccion["es_torax"]
                 mensaje_modelo = prediccion["mensaje"]
                 confianza_torax = prediccion.get("confianza_torax")
+
+                if not es_torax:
+                    mensaje_interpretativo = (
+                        "La imagen no corresponde a una radiografía de tórax. "
+                        "Seleccione una imagen válida para ejecutar el análisis pulmonar."
+                    )
+
+                elif resultado == "NORMAL":
+                    mensaje_interpretativo = (
+                        "No se detectaron patrones compatibles con neumonía "
+                        "en la imagen analizada."
+                    )
+
+                elif resultado == "NEUMONIA":
+                    mensaje_interpretativo = (
+                        "Se detectaron patrones compatibles con neumonía. "
+                        "Se recomienda consultar a un profesional de la salud."
+                    )
+
+                else:
+                    mensaje_interpretativo = (
+                        "El modelo generó una clasificación no reconocida. "
+                        "Revise la configuración de clases del modelo."
+                    )
 
             except Exception as error:
                 error_analisis = (
@@ -54,6 +79,7 @@ def analizar(request):
         "es_torax": es_torax,
         "mensaje_modelo": mensaje_modelo,
         "error_analisis": error_analisis,
+        "mensaje_interpretativo": mensaje_interpretativo,
     }
 
     return render(

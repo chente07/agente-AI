@@ -115,8 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
             analyzeButton.disabled = true;
             analyzeButton.textContent = "Analizando...";
 
-            imageInput.disabled = true;
-
             if (loadImageLabel) {
                 loadImageLabel.classList.add("btn-disabled");
             }

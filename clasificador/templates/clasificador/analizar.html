@@ -1,0 +1,232 @@
+{% extends 'clasificador/base.html' %}
+
+{% block titulo %}Analizar radiografía | PulmoScan{% endblock %}
+
+{% block contenido %}
+<section class="analysis-layout">
+
+    <div class="left-panel">
+        <h2 class="section-title">Imagen cargada</h2>
+
+        <div class="image-preview-box" id="image-preview-box">
+            {% if analisis %}
+                <img
+                    src="{{ analisis.imagen.url }}"
+                    alt="Radiografía cargada"
+                    class="preview-image"
+                    id="preview-image"
+                >
+            {% else %}
+                <p id="preview-message">
+                    Seleccione una radiografía de tórax en formato JPG, JPEG o PNG.
+                </p>
+
+                <img
+                    src=""
+                    alt="Vista previa de radiografía"
+                    class="preview-image"
+                    id="preview-image"
+                    hidden
+                >
+            {% endif %}
+        </div>
+
+        <div class="
+            result-box
+            {% if resultado == 'NORMAL' %}
+                result-active-normal
+            {% elif resultado == 'NEUMONIA' %}
+                result-active-pneumonia
+            {% elif resultado == 'NO_TORAX' %}
+                result-active-warning
+            {% endif %}
+        ">
+            <h3>Resultados del análisis</h3>
+
+            <div id="result-content">
+                {% if error_analisis %}
+                    <div class="form-error">
+                        <p>{{ error_analisis }}</p>
+                    </div>
+
+                {% elif resultado %}
+                    <div class="classification-result">
+
+                        {% if es_torax %}
+                            <p class="result-label">
+                                Clasificación preliminar del modelo:
+                            </p>
+
+                            <p class="
+                                result-value
+                                {% if resultado == 'NORMAL' %}
+                                    result-normal
+                                {% elif resultado == 'NEUMONIA' %}
+                                    result-pneumonia
+                                {% else %}
+                                    result-warning
+                                {% endif %}
+                            ">
+                                {{ resultado }}
+                            </p>
+
+                            <p class="confidence-value">
+                                Confianza del modelo:
+                                <strong>{{ confianza|floatformat:2 }} %</strong>
+                            </p>
+
+                            {% if confianza_torax %}
+                                <p class="confidence-value">
+                                    Verificación de tórax:
+                                    <strong>{{ confianza_torax|floatformat:2 }} %</strong>
+                                </p>
+                            {% endif %}
+
+                            {% if mensaje_interpretativo %}
+                                <p class="interpretation-message">
+                                    {{ mensaje_interpretativo }}
+                                </p>
+                            {% endif %}
+
+                            <div class="medical-warning">
+                                <strong>Aviso:</strong>
+                                Este resultado fue generado por un modelo de inteligencia artificial
+                                con fines académicos. No sustituye la valoración de un médico especialista.
+                            </div>
+
+                        {% else %}
+                            <p class="result-label">
+                                Imagen no válida para análisis pulmonar:
+                            </p>
+
+                            <p class="result-value result-warning">
+                                NO TÓRAX
+                            </p>
+
+                            <p class="confidence-value">
+                                Confianza del filtro:
+                                <strong>{{ confianza|floatformat:2 }} %</strong>
+                            </p>
+
+                            {% if mensaje_interpretativo %}
+                                <p class="interpretation-message">
+                                    {{ mensaje_interpretativo }}
+                                </p>
+                            {% endif %}
+
+                            <div class="medical-warning">
+                                <strong>Aviso:</strong>
+                                El análisis de neumonía solo se ejecuta cuando la imagen corresponde
+                                a una radiografía de tórax.
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                {% else %}
+                    <p>
+                        Seleccione una radiografía y presione
+                        <strong>Ejecutar análisis</strong>.
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="upload-form"
+            id="analysis-form"
+        >
+            {% csrf_token %}
+
+            <label
+                for="{{ formulario.imagen.id_for_label }}"
+                class="btn btn-purple full-btn {% if analisis %}btn-disabled{% endif %}"
+                id="load-image-label"
+            >
+                Cargar imagen
+            </label>
+
+            {% if analisis %}
+                <input
+                    type="file"
+                    id="image-input"
+                    name="imagen"
+                    accept=".jpg,.jpeg,.png"
+                    disabled
+                >
+            {% else %}
+                {{ formulario.imagen }}
+            {% endif %}
+
+            {% if formulario.imagen.errors %}
+                <div class="form-error">
+                    {% for error in formulario.imagen.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="meta-box">
+                <h3>Metadatos de imagen</h3>
+
+                <p id="file-name">
+                    <strong>Archivo:</strong>
+                    {% if analisis %}
+                        {{ analisis.imagen.name }}
+                    {% else %}
+                        Ninguno seleccionado
+                    {% endif %}
+                </p>
+
+                <p id="file-type">
+                    <strong>Estado:</strong>
+                    {% if analisis %}
+                        Imagen analizada
+                    {% else %}
+                        —
+                    {% endif %}
+                </p>
+
+                <p id="file-size">
+                    <strong>Resultado:</strong>
+                    {% if resultado %}
+                        {{ resultado }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </p>
+
+                <button
+                    type="button"
+                    class="btn btn-red full-btn"
+                    id="remove-image"
+                >
+                    Remover imagen o Nuevo análisis
+                </button>
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-purple full-btn"
+                id="analyze-button"
+                {% if analisis %}disabled{% endif %}
+            >
+                {% if analisis %}
+                    Análisis completado
+                {% else %}
+                    Ejecutar análisis
+                {% endif %}
+            </button>
+
+            <a href="{% url 'inicio' %}" class="btn btn-green full-btn">
+                Regresar al inicio
+            </a>
+        </form>
+    </div>
+
+</section>
+{% endblock %}

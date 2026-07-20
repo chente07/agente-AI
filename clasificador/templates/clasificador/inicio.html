@@ -1,0 +1,43 @@
+{% extends 'clasificador/base.html' %}
+
+{% block titulo %}Inicio | PulmoScan{% endblock %}
+
+{% block contenido %}
+<section class="welcome-page">
+
+    <div class="warning-box">
+        <h2>Bienvenido a PulmoScan</h2>
+
+        <p>
+            Esta plataforma web es un <strong>proyecto escolar</strong> desarrollado con fines
+            académicos para la clasificación preliminar de radiografías de tórax.
+        </p>
+
+        <p>
+            El sistema puede ayudar a identificar patrones compatibles con
+            <strong>NORMAL</strong> o <strong>PNEUMONIA</strong>, pero
+            <strong>no representa un diagnóstico médico oficial</strong>.
+        </p>
+
+        <p>
+            Si tienes dudas sobre tu estado de salud o el de otra persona,
+            debes consultar a un <strong>médico especialista</strong>.
+        </p>
+
+        <p class="small-note">
+            Al continuar, aceptas que esta herramienta es únicamente de apoyo informativo.
+        </p>
+    </div>
+
+    <div class="welcome-actions">
+        <a href="{% url 'analizar' %}" class="btn btn-green">
+            Continuar
+        </a>
+
+        <a href="https://www.google.com" class="btn btn-red">
+            Salir de la página
+        </a>
+    </div>
+
+</section>
+{% endblock %}

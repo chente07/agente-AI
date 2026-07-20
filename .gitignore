@@ -1,0 +1,32 @@
+# Python / Django
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+
+# Entorno virtual
+env/
+venv/
+.venv/
+
+# Archivos subidos por usuarios
+media/
+
+# Archivos temporales
+*.log
+
+# VS Code
+.vscode/
+
+# Variables de entorno / secretos
+.env
+
+# Datasets y entrenamiento
+datasets/
+runs/
+*.zip
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

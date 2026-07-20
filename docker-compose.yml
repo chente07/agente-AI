@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    image: pulmoscan
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+      - ./media:/app/media
+    env_file:
+      - .env

@@ -278,6 +278,10 @@ body {
     background: linear-gradient(90deg, #f39c12, #f1c40f);
 }
 
+.result-other {
+    background: linear-gradient(90deg, #7b2ff7, #9b59f5);
+}
+
 .confidence-value {
     font-size: 1.1rem;
     margin-bottom: 18px;
@@ -358,6 +362,18 @@ body {
     animation: glow-warning 1.4s ease-in-out infinite alternate;
 }
 
+.result-box.result-active-other {
+    border-color: #9b59f5 !important;
+    outline: 2px solid #9b59f5;
+    outline-offset: 4px;
+    box-shadow:
+        0 0 10px #9b59f5,
+        0 0 22px rgba(155, 89, 245, 0.90),
+        0 0 40px rgba(155, 89, 245, 0.65),
+        inset 0 0 12px rgba(155, 89, 245, 0.25) !important;
+    animation: glow-other 1.4s ease-in-out infinite alternate;
+}
+
 @keyframes glow-normal {
     from {
         box-shadow:
@@ -409,6 +425,24 @@ body {
             0 0 28px rgba(241, 196, 15, 0.80),
             0 0 46px rgba(241, 196, 15, 0.55),
             inset 0 0 14px rgba(241, 196, 15, 0.30);
+    }
+}
+
+@keyframes glow-other {
+    from {
+        box-shadow:
+            0 0 6px rgba(155, 89, 245, 0.65),
+            0 0 16px rgba(155, 89, 245, 0.45),
+            0 0 28px rgba(155, 89, 245, 0.30),
+            inset 0 0 8px rgba(155, 89, 245, 0.15);
+    }
+
+    to {
+        box-shadow:
+            0 0 12px rgba(155, 89, 245, 1),
+            0 0 28px rgba(155, 89, 245, 0.80),
+            0 0 46px rgba(155, 89, 245, 0.55),
+            inset 0 0 14px rgba(155, 89, 245, 0.30);
     }
 }
 

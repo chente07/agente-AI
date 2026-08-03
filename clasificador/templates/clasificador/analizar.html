@@ -37,6 +37,8 @@
                 result-active-normal
             {% elif resultado == 'NEUMONIA' %}
                 result-active-pneumonia
+            {% elif resultado == 'OTRA_ENFERMEDAD' %}
+                result-active-other
             {% elif resultado == 'NO_TORAX' %}
                 result-active-warning
             {% endif %}
@@ -63,11 +65,13 @@
                                     result-normal
                                 {% elif resultado == 'NEUMONIA' %}
                                     result-pneumonia
+                                {% elif resultado == 'OTRA_ENFERMEDAD' %}
+                                    result-other
                                 {% else %}
                                     result-warning
                                 {% endif %}
                             ">
-                                {{ resultado }}
+                                {{ resultado_texto }}
                             </p>
 
                             <p class="confidence-value">
@@ -194,7 +198,7 @@
                 <p id="file-size">
                     <strong>Resultado:</strong>
                     {% if resultado %}
-                        {{ resultado }}
+                        {{ resultado_texto }}
                     {% else %}
                         —
                     {% endif %}

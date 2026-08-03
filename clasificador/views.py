@@ -53,6 +53,13 @@ def analizar(request):
                         "Se recomienda consultar a un profesional de la salud."
                     )
 
+                elif resultado == "OTRA_ENFERMEDAD":
+                    mensaje_interpretativo = (
+                        "La imagen no corresponde a un pulmón sano ni presenta un patrón "
+                        "típico de neumonía. Podría tratarse de otra afección pulmonar. "
+                        "Se recomienda consultar a un profesional de la salud."
+                    )
+
                 else:
                     mensaje_interpretativo = (
                         "El modelo generó una clasificación no reconocida. "
@@ -70,10 +77,13 @@ def analizar(request):
     else:
         formulario = AnalisisForm()
 
+    resultado_texto = resultado.replace("_", " ") if resultado else None
+
     contexto = {
         "formulario": formulario,
         "analisis": analisis,
         "resultado": resultado,
+        "resultado_texto": resultado_texto,
         "confianza": confianza,
         "confianza_torax": confianza_torax,
         "es_torax": es_torax,
